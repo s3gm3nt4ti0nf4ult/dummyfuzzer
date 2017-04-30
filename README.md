@@ -25,6 +25,6 @@ To display help, simply run:
 
 
 TODO
-- [ ] argument parsing
+- [x] argument parsing
 - [ ] parsing config file
 - [ ] tbd.
