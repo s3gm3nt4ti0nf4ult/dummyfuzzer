@@ -6,6 +6,13 @@ import argparse
 
 
 
+def edit_file():
+    with open(fn, 'rb') as f_in:
+        data = bytearray(f_in.read())
+    
+    edit_func(data)
+
+
 def flip_bit():
     pass
 
@@ -41,8 +48,6 @@ def fuzz(binary, sample, isdir):
 
         random_func = random.choice([flip_bit, flip_bits, flip_bytes, special_nums])
         
-        with open(fn, 'rb') as f:
-            data = random_func(f.read())
 
         break
 
