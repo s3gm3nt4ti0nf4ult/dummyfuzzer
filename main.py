@@ -6,7 +6,7 @@ import argparse
 from string import printable
 from os import rename
 
-#funcs = {'flip_bit' : flip_bit,'flip_bits' : flip_bits,'flip_bytes' : flip_bytes,'special_nums': special_nums}
+funcs = {'flip_bit' : flip_bit,'flip_bits' : flip_bits,'flip_bytes' : flip_bytes,'special_nums': special_nums}
 crash_file_prefix = 0
 
 
@@ -42,18 +42,54 @@ def flip_bit(data):
     return data
 
 
-def flip_bytes(sample):
-    pass
+def flip_bytes(data):
+    count  = int(len(data)*0.01)
+    if count == 0:
+        count =1
+
+    for _ in range(count):
+        data[random.randint(0, len(data)-1)] = random.randint(0,255)
+
+    return data
 
 
 
-def special_nums(sample):
-    pass
+
+def special_nums(data):
+    numbers = [
+        (1, struct.pack("B", 0xff)),  # malloc((unsigned char)(text_lenght + 3))
+        (1, struct.pack("B", 0x7f)),
+        (1, struct.pack("B", 0)),
+        (2, struct.pack("H", 0xffff)),
+        (2, struct.pack("H", 0)),     
+        (4, struct.pack("I", 0xffffffff)),
+        (4, struct.pack("I", 0)),
+        (4, struct.pack("I", 0x80000000)),
+        (4, struct.pack("I", 0x40000000)),
+        (4, struct.pack("I", 0x7fffffff)),
+    ]
+
+    count = int(len(data)*0.01)
+    if count == 0:
+        count = 1
+
+    for _ in range(0, count):
+        n_size, n = random.choice(numbers)
+        sz = len(data) - n_size
+        if sz<0:
+            continue
+        idx = random.randint(0,sz)
+        data[idx:idx+n_size] = bytearray(n)
+        
+    return data<`2`>
 
 
+def pick_file(directory):
+    if os.path.isdir(directory):
+        return random.choice([f for f in listdir(directory) if isfile(join(directory, f))])
 
-def pick_file():
-    pass
+    else:
+        return None
 
 
 
